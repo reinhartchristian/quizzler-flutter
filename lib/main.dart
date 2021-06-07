@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'quiz_brain.dart';
 
 void main() => runApp(Quizzler());
 
@@ -37,7 +38,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -61,7 +62,15 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                bool correctAnswers = quizBrain.getQuestionAnswer();
+                if (correctAnswers == true) {
+                  print('pinter men');
+                } else {
+                  print('tolol men');
+                }
+                setState(() {
+                  quizBrain.nextQuestion();
+                });
               },
             ),
           ),
@@ -79,19 +88,50 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                bool correctAnswers = quizBrain.getQuestionAnswer();
+                if (correctAnswers == false) {
+                  print('pinter men');
+                } else {
+                  print('tolol men');
+                }
+                setState(() {
+                  quizBrain.nextQuestion();
+                });
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
-}
 
 /*
 question1: 'You can lead a cow down stairs but not up stairs.', false,
 question2: 'Approximately one quarter of human bones are in the feet.', true,
 question3: 'A slug\'s blood is green.', true,
 */
+
+  List<Icon> scoreKeeper = [];
+
+  // List<String> questions = [
+  //   'You can lead a cow down stairs but not up stairs.',
+  //   'Approximately one quarter of human bones are in the feet.',
+  //   'A slug\'s blood is green.',
+  // ];
+
+  // List<bool> answers = [
+  //   false,
+  //   true,
+  //   true,
+  // ];
+
+  // Question q1 = Question(
+  //   q: 'You can lead a cow down stairs but not up stairs.',
+  //   a: false,
+  // );
+
+  QuizBrain quizBrain = QuizBrain();
+}
