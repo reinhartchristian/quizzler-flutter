@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(Quizzler());
 
@@ -62,15 +63,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswers = quizBrain.getQuestionAnswer();
-                if (correctAnswers == true) {
-                  print('pinter men');
-                } else {
-                  print('tolol men');
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -88,15 +81,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswers = quizBrain.getQuestionAnswer();
-                if (correctAnswers == false) {
-                  print('pinter men');
-                } else {
-                  print('tolol men');
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
@@ -106,6 +91,36 @@ class _QuizPageState extends State<QuizPage> {
         )
       ],
     );
+  }
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswers = quizBrain.getQuestionAnswer();
+    setState(() {
+      if (quizBrain.isFinished() == true) {
+        Alert(
+                context: context,
+                title: 'Finished',
+                desc: 'You\'ve finished the quiz')
+            .show();
+
+        quizBrain.reset();
+
+        scoreKeeper = [];
+      } else {
+        if (userPickedAnswer == correctAnswers) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nextQuestion();
+      }
+    });
   }
 
 /*
